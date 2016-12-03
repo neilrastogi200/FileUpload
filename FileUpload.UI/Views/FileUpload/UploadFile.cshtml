@@ -1,0 +1,60 @@
+﻿@model FileUpload.UI.ViewModels.FileUploadViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts
+{
+    if('@ViewBag.ValidationError'!="")
+    {
+    $('#divValidationMessage').show();
+    }
+    else
+    {
+    $('#divValidationMessage').hide();
+    }
+
+    if('@ViewBag.SuccessMessage'!="")
+    {
+    $('#divSuccessMessage').show();
+    }
+    else
+    {
+    $('#divSuccessMessage').hide();
+    }
+
+    if('@ViewBag.ErrorMessage'!="")
+    {
+    $('#divErrorMessage').show();
+    }
+    else
+    {
+    $('#divErrorMessage').hide();
+    }
+
+}
+    <h4>FileUpload Facility</h4>
+
+    @using (Html.BeginForm("UploadFile", "FileUpload", FormMethod.Post, new {enctype = "multipart/form-data"}))
+    {
+        <div class="form-group">
+            <input type="file" name="File"/>
+            @Html.ValidationMessageFor(model => model.File, "", new {@class = "text-danger"})
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Upload" class="btn btn-success"/>
+        </div>
+
+        <div id="divSuccessMessage" style="display: none">
+            @ViewBag.SuccessMessage
+        </div>
+        <div id="divErrorMessage" style="display: none">
+            @ViewBag.ErrorMessage
+        </div>
+
+        <div id="divValidationMessage" style="display: none">
+            <p  style="color: red"> @ViewBag.ValidationError</p>
+        </div>
+    }
+

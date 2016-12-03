@@ -1,0 +1,26 @@
+﻿@using GridMvc.Html
+@model IEnumerable<FileUpload.UI.ViewModels.TransactionViewNodel>
+
+@{
+    ViewBag.Title = "Transactions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Display Transactions</h4>
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+<link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" ></script>
+<script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+<div class="code-cut">
+
+    @Html.Grid(Model).Columns(columns =>
+    {
+        columns.Add(x => x.Account).Titled("Account").Filterable(true);
+        columns.Add(x => x.Description).Titled("Desc").Filterable(false);
+        columns.Add(x => x.CurrencyCode).Titled("CurrencyType").Filterable(true);
+        columns.Add(x => x.Amount).Titled("Amount").Filterable(true);
+    }).WithPaging(10).Sortable(true)
+
+</div> 
