@@ -6,6 +6,6 @@ namespace FileUpload.BLL.Services.ValidationService
 {
     public interface IValidationService
     {
-        ConcurrentBag<string> IsValid(Transaction transaction);
+        List<string> IsValid(Transaction transaction);
     }
 }

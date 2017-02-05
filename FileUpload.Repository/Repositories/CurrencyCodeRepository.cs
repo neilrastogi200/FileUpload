@@ -28,6 +28,7 @@ namespace FileUpload.Repository.Repositories
 
             using (var connection = _connectionFactory.GetConnection)
             {
+                
                 return
                     connection.Query<CurrencyCode>("dbo.GETCURRENCYCODES", null, null, true,
                         commandType: CommandType.StoredProcedure).Select(x => x.AlphaNumericCode);

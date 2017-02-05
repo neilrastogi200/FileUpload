@@ -9,24 +9,27 @@ namespace FileUpload.BLL.Services.ValidationService
     public class ValidationService : IValidationService
     {
         private readonly ICurrencyCodeRepository _currencyCodeRepository;
-        private readonly ConcurrentBag<string> _errorList = new ConcurrentBag<string>();
+      
 
         public ValidationService(ICurrencyCodeRepository currencyCodeRepository)
         {
             _currencyCodeRepository = currencyCodeRepository;
         }
 
-        public ConcurrentBag<string> IsValid(Transaction transaction)
-        {
+        public List<string> IsValid(Transaction transaction)
+        { 
+            //Change back to List now resolved issue due to scope of the variable.
+            List<string> errorList = new List<string>();
+
             if (string.IsNullOrEmpty(transaction.Account) || string.IsNullOrEmpty(transaction.Amount) ||
                 string.IsNullOrEmpty(transaction.Description) || string.IsNullOrEmpty(transaction.CurrencyCode))
             {
-                _errorList.Add($"This transaction has failed as there are missing values for the columns");
+                errorList.Add($"This transaction has failed as there are missing values for the columns");
             }
 
             if (ValidateAmount(transaction.Amount) == 0)
             {
-                _errorList.Add(
+                errorList.Add(
                     $"For {transaction.Account} this has failed validation, the amount is not in correct format");
             }
 
@@ -34,13 +37,14 @@ namespace FileUpload.BLL.Services.ValidationService
 
             if (!validCurrencyCodesList.Contains(transaction.CurrencyCode))
             {
-                _errorList.Add($"The{transaction.CurrencyCode} is invalid format");
+                errorList.Add($"The{transaction.CurrencyCode} is invalid format");
             }
 
 
-            return _errorList;
+            return errorList;
         }
 
+        //Can add caching for further subsequent calls improvement for performance. 
         private IList<string> GetCurrencyCodes()
         {
             var validCurencyCodes = _currencyCodeRepository.GetAlphaNumericCode().ToList();

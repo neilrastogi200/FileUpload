@@ -36,6 +36,7 @@ namespace FileUpload.BLL
 
             try
             {
+                //change this reader.ReadLineAsync better for memory optimisation so use a while loop
                 if (fileContents != null)
                 {
                     string content;
@@ -60,8 +61,7 @@ namespace FileUpload.BLL
                         var currencyCode = fields[2];
                         var amount = fields[3];
 
-
-                        processedFile.ErrorsList = _validationService.IsValid(new Transaction
+                        var errors = _validationService.IsValid(new Transaction
                         {
                             Account = account,
                             Description = description,
@@ -70,8 +70,13 @@ namespace FileUpload.BLL
                         });
 
 
-                        if (processedFile.ErrorsList.Any())
+                        if (errors.Any())
                         {
+                            foreach (var item in errors)
+                            {
+                                processedFile.ErrorsList.Add(item);
+                            }
+
                             return;
                         }
 
